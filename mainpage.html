@@ -1,0 +1,179 @@
+
+<div class="container">
+    <div class="form-group" class="sform">
+    <h2 style="text-align: center;">Student Form</h2>
+    <form [formGroup]="studentForm" (ngSubmit)="save()" >
+      <div class="mb-3">
+        <label>First Name:</label>
+        <input type="text" placeholder="Enter Your Name" formControlName="sname" class="form-control">
+        <div *ngIf="studentForm.controls['sname'].touched && studentForm.controls['sname'].invalid" style="color: rgb(248, 91, 91);">
+          <span *ngIf="studentForm.controls['sname'].hasError('required')">
+            Name is Required
+          </span>
+          
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Gender:</label>
+        <div>
+            <input type="radio" value="M" formControlName="gender">
+            <label>Male</label>
+            
+            <input type="radio" value="F" formControlName="gender">
+            <label>Female</label>
+            
+            <input type="radio" value="T" formControlName="gender">
+            <label>Transgender</label>
+            <p *ngIf="studentForm.controls['gender'].touched && studentForm.controls['gender'].invalid" style="color: rgb(248, 91, 91);">
+              Gender is Requird
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Address:</label>
+        <input type="text" placeholder="Enter Your Address" formControlName="address" class="form-control">
+        <p *ngIf="studentForm.controls['address'].touched && studentForm.controls['address'].invalid" style="color: rgb(248, 91, 91);">
+          Address is Requird
+        </p>
+    </div>
+     <p>
+      <button type="submit" class="btn btn-success" [disabled]="studentForm.invalid">Save</button>
+     </p>
+    
+    </form>
+  </div>
+
+
+
+
+
+
+  
+
+
+
+  <!-- <div class="scroll">
+    <h2 style="text-align: center;">Student Details</h2>
+    <table class="table table-hover">
+      <thead class="term">
+        <tr>
+          <th>SNO</th>
+          <th>NAME</th>
+          <th>GENDER</th>
+          <th>ADDRESS</th>
+          <th>ALLOT</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of student;let i=index">
+          <td>{{i+1}}</td>
+          <td>{{s.sname}}</td>
+          <td>{{s.gender}}</td>
+          <td>{{s.address}}</td>
+          <td *ngIf="!s.allottedHostel">
+            <button class="btn btn-secondary" (click)="AllotClick(s)">Allot</button>
+          </td>
+         <td *ngIf="s.allottedHostel">{{s.allottedHostel}}</td>
+        </tr>
+       
+      </tbody>
+    </table>
+    
+  </div> -->
+
+
+
+  <div class="mat-elevation-z8" id="pos">
+    <h2 style="text-align: center;">Student Details</h2>
+    <table mat-table [dataSource]="dataSource">
+  
+
+      <!-- serial no -->
+      <ng-container matColumnDef="sno">
+        <th mat-header-cell *matHeaderCellDef> SNO</th>
+        <td mat-cell *matCellDef="let element; let i = index">  
+           {{ (paginator.pageIndex * paginator.pageSize) + (i + 1) }}</td>
+    </ng-container>
+    
+  
+      <!-- Name  -->
+      <ng-container matColumnDef="sname">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.sname}} </td>
+      </ng-container>
+  
+      <!-- Gender -->
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef> Gender </th>
+        <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+      </ng-container>
+  
+      <!-- Address -->
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <!-- Allot -->
+      <ng-container matColumnDef="allotment">
+        <th mat-header-cell *matHeaderCellDef> Allotment </th>
+        <td mat-cell *matCellDef="let element"> 
+          <ng-container *ngIf="!element.allottedHostel; else allotted">
+            <button (click)="AllotClick(element)">Allot</button> 
+          </ng-container>
+          <ng-template #allotted>
+            {{ element.allottedHostel }}
+          </ng-template>
+        </td>
+      </ng-container>
+      
+      
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[4, 6, 9]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements" class="set">
+    </mat-paginator>
+  </div>
+
+
+
+ 
+</div>
+ <!-- Hostel Details -->
+
+<div *ngIf="hostelData" >
+  <p style="text-align: center;">Name : {{name}}  Gender : {{gender}}</p>
+  <h2 style="text-align: center;">Hostel Details</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Hostel Name</th>
+        <th>Total Occupancy</th>
+        <th>Occupancy Count</th>
+        <th>Hostel Type</th>
+        <th>Select</th>
+       
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let h of hostelDatails;let i=index">
+        <td>{{h.name}}</td>
+        <td>{{h.totalOccupancy}}</td>
+        <td>{{h.occupancyCount}}</td>
+        <td>{{h.type}}</td>
+        <td><input type="radio" name="select" (change)="SelectedHostel(h)"></td>
+        
+      </tr>
+      
+     
+    </tbody>
+  </table>
+  <p style="text-align: center;"><button class="btn btn-primary" (click)="incrementOccupancy()">Submit</button></p>
+</div>
